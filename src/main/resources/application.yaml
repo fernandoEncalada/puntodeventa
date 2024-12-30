@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: puntodeventa
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_CONTAINER:localhost}:3306/bd_sistema_facturacion?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: ${MYSQL_USER:root} # Cambiar el nombre de usuario configurado en su DB
+    password: ${MYSQL_PASSWORD:3tk98M17} # Cambiar la contraseña configurada en su DB
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8082
