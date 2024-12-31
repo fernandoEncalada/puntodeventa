@@ -1,6 +1,7 @@
 package org.fenc.puntodeventa.service;
 
 import lombok.RequiredArgsConstructor;
+import org.fenc.puntodeventa.dto.CompetenciaRequestDto;
 import org.fenc.puntodeventa.model.Competencia;
 import org.fenc.puntodeventa.repository.CompetenciaRepository;
 import org.springframework.stereotype.Service;
@@ -20,28 +21,27 @@ public class CompetenciaService {
     }
 
     public Optional<Competencia> findById(Long id) {
-
-
-            return competenciaRepository.findById(id);
+        return competenciaRepository.findById(id);
     }
 
-    public Competencia save(Competencia competencia) {
-
+    public Competencia save(CompetenciaRequestDto request) {
+        Competencia competencia = Competencia.builder()
+                .nombre(request.getNombre())
+                .descripcion(request.getDescripcion())
+                .build();
         return competenciaRepository.save(competencia);
     }
 
-    public Optional<Competencia> update(Long id, Competencia competencia) {
-
+    public Optional<Competencia> update(Long id, CompetenciaRequestDto request) {
         return competenciaRepository.findById(id)
                 .map(record -> {
-                    record.setNombre(competencia.getNombre());
-                    record.setDescripcion(competencia.getDescripcion());
+                    record.setNombre(request.getNombre());
+                    record.setDescripcion(request.getDescripcion());
                     return competenciaRepository.save(record);
                 });
     }
 
     public boolean delete(Long id) {
-
         return competenciaRepository.findById(id)
                 .map(record -> {
                     competenciaRepository.deleteById(id);

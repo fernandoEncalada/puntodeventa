@@ -1,6 +1,7 @@
 package org.fenc.puntodeventa.service;
 
 import lombok.RequiredArgsConstructor;
+import org.fenc.puntodeventa.dto.PersonaRequestDto;
 import org.fenc.puntodeventa.model.Persona;
 import org.fenc.puntodeventa.repository.PersonaRepository;
 import org.springframework.stereotype.Service;
@@ -21,16 +22,29 @@ public class PersonaService {
         return personaRepository.findById(id);
     }
 
-    public Persona save(Persona persona) {
+    public Persona save(PersonaRequestDto requestDto) {
+        Persona persona = Persona.builder()
+                .nombre(requestDto.getNombre())
+                .apellido(requestDto.getApellido())
+                .dni(requestDto.getDni())
+                .celular(requestDto.getCelular())
+                .correo(requestDto.getCorreo())
+                .build();
         return personaRepository.save(persona);
     }
 
-    public Optional<Persona> update(Long id, Persona persona) {
-        if (personaRepository.existsById(id)) {
-            persona.setIdPersona(id);
-            return Optional.of(personaRepository.save(persona));
-        }
-        return Optional.empty();
+    public Optional<Persona> update(Long id, PersonaRequestDto requestDto) {
+        return personaRepository.findById(id)
+                .map(record -> {
+                    record.setNombre(requestDto.getNombre());
+                    record.setApellido(requestDto.getApellido());
+                    record.setDni(requestDto.getDni());
+                    record.setCelular(requestDto.getCelular());
+                    record.setCorreo(requestDto.getCorreo());
+                    Persona updated = personaRepository.save(record);
+                    return Optional.of(updated);
+                })
+                .orElseGet(Optional::empty);
     }
 
     public boolean delete(Long id) {

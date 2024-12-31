@@ -1,5 +1,6 @@
 package org.fenc.puntodeventa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +28,7 @@ public class Competencia {
     private String nombre;
     private String descripcion;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "competencias")
     private List<Rol> roles;
 }

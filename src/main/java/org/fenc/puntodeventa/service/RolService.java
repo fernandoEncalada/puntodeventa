@@ -1,6 +1,7 @@
 package org.fenc.puntodeventa.service;
 
 import lombok.RequiredArgsConstructor;
+import org.fenc.puntodeventa.dto.RolRequestDto;
 import org.fenc.puntodeventa.model.Competencia;
 import org.fenc.puntodeventa.model.Rol;
 import org.fenc.puntodeventa.repository.CompetenciaRepository;
@@ -8,6 +9,7 @@ import org.fenc.puntodeventa.repository.RolRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,18 +27,30 @@ public class RolService {
         return rolRepository.findById(id);
     }
 
-    public Rol save(Rol rol) {
-
+    public Rol save(RolRequestDto request) {
+        List<Competencia> competencias = competenciaRepository.findAllById(request.getCompetenciasId());
+        if (competencias.isEmpty()) {
+            throw new RuntimeException("Competencias no encontradas");
+        }
+        Rol rol = Rol.builder()
+                .rol(request.getRol())
+                .estado(true)
+                .competencias(competencias)
+                .build();
         return rolRepository.save(rol);
     }
 
-    public Optional<Rol> update(Long id, Rol rol) {
-        return rolRepository.findById(id)
-                .map(rol1 -> {
-                    rol1.setRol(rol.getRol());
-                    rol1.setEstado(true);
-                    return rolRepository.save(rol1);
-                });
+    public Optional<Rol> update(Long id, RolRequestDto request) {
+        List<Competencia> competencias = competenciaRepository.findAllById(request.getCompetenciasId());
+        if (competencias.isEmpty()) {
+            throw new RuntimeException("Competencias no encontradas");
+        }
+        Rol rol = rolRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+        rol.setRol(request.getRol());
+        rol.setEstado(request.getEstado());
+        rol.setCompetencias(competencias);
+        return Optional.of(rolRepository.save(rol));
     }
 
     public boolean delete(Long id) {
@@ -48,19 +62,22 @@ public class RolService {
                 }).orElse(false);
     }
 
-    public Optional<Rol> addCompetencia(Long idRol, Competencia competencia) {
-        Optional<Rol> rolOptional = rolRepository.findById(idRol);
-        if (rolOptional.isPresent()) {
-            Rol rol = rolOptional.get();
-            Competencia comp = competenciaRepository.findById(competencia.getIdCompetencia())
-                    .orElseThrow(() -> new RuntimeException("Competencia no encontrada"));
-            if (comp != null) {
-                rol.getCompetencias().add(comp);
-                return Optional.of(rolRepository.save(rol));
-            }
+public Optional<Rol> addCompetencia(Long idRol, List<Long> competenciasId) {
+    Optional<Rol> rolOptional = rolRepository.findById(idRol);
+    if (rolOptional.isPresent()) {
+        Rol rol = rolOptional.get();
+        List<Competencia> competencias = competenciaRepository.findAllById(competenciasId);
+        if (!competencias.isEmpty()) {
+            competencias.forEach(competencia -> {
+                if (!rol.getCompetencias().contains(competencia)) {
+                    rol.getCompetencias().add(competencia);
+                }
+            });
+            return Optional.of(rolRepository.save(rol));
         }
-        return Optional.empty();
     }
+    return Optional.empty();
+}
 
     public boolean removeCompetencia(Long idRol, Long idCompetencia) {
         Optional<Rol> rolOptional = rolRepository.findById(idRol);

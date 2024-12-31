@@ -64,7 +64,7 @@ public class FacturaService {
         // Crear factura
         Factura factura = new Factura();
         factura.setRuc(facturaRequestDto.getRuc());
-        factura.setFecha(new java.util.Date(facturaRequestDto.getFecha()));
+        factura.setFecha(java.sql.Date.valueOf(facturaRequestDto.getFecha()));
         factura.setTipoPago(tipoPago);
         factura.setPersona(persona);
         factura.setDescuento(facturaRequestDto.getDescuento());
@@ -88,11 +88,17 @@ public class FacturaService {
         return factura;
     }
 
+    @Transactional
     public boolean delete(Long id) {
-        if (facturaRepository.existsById(id)) {
-            facturaRepository.deleteById(id);
-            return true;
-        }
-        return false;
+        return facturaRepository.findById(id)
+                .map(factura -> {
+                    // Eliminar items de la factura
+                    List<ItemFactura> items = itemFacturaRepository.findByFacturaId(id);
+                    itemFacturaRepository.deleteAll(items);
+
+                    // Eliminar la factura
+                    facturaRepository.deleteById(id);
+                    return true;
+                }).orElse(false);
     }
 }

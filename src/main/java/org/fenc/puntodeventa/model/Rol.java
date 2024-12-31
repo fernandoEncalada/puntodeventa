@@ -1,5 +1,6 @@
 package org.fenc.puntodeventa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +29,10 @@ public class Rol {
 
     private String rol;
     private Boolean estado;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roles")
+    private List<Usuario> usuarios;
 
     @ManyToMany
     @JoinTable(

@@ -15,4 +15,17 @@ spring:
       ddl-auto: update
 
 server:
-  port: 8082
+  port: 9898
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+logging:
+  level:
+    org:
+      springdoc: DEBUG
+      springframework:
+        web: DEBUG

@@ -1,5 +1,7 @@
 package org.fenc.puntodeventa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,10 +25,12 @@ public class ItemFactura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idItemFactura;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_factura")
     private Factura factura;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_producto")
     private Producto producto;

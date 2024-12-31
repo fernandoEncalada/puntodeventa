@@ -1,6 +1,7 @@
 package org.fenc.puntodeventa.service;
 
 import lombok.RequiredArgsConstructor;
+import org.fenc.puntodeventa.dto.ClasificacionRequestDto;
 import org.fenc.puntodeventa.model.Clasificacion;
 import org.fenc.puntodeventa.repository.ClasificacionRepository;
 import org.springframework.stereotype.Service;
@@ -23,20 +24,23 @@ public class ClasificacionService {
         return clasificacionRepository.findById(id);
     }
 
-    public Clasificacion save(Clasificacion clasificacion) {
+    public Clasificacion save(ClasificacionRequestDto requestDto) {
 
+        Clasificacion clasificacion = Clasificacion.builder()
+                .grupo(requestDto.getGrupo())
+                .build();
         return clasificacionRepository.save(clasificacion);
     }
 
-    public Optional<Clasificacion> update(Long id, Clasificacion clasificacion) {
+    public Optional<Clasificacion> update(Long id, ClasificacionRequestDto requestDto) {
 
         return clasificacionRepository.findById(id)
                 .map(record -> {
-                    record.setGrupo(clasificacion.getGrupo());
+                    record.setGrupo(requestDto.getGrupo());
                     Clasificacion updated = clasificacionRepository.save(record);
                     return Optional.of(updated);
                 })
-                .orElseGet(() -> Optional.empty());
+                .orElseGet(Optional::empty);
     }
 
     public boolean delete(Long id) {

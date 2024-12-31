@@ -1,6 +1,7 @@
 package org.fenc.puntodeventa.service;
 
 import lombok.RequiredArgsConstructor;
+import org.fenc.puntodeventa.dto.TipoPagoRequestDto;
 import org.fenc.puntodeventa.model.TipoPago;
 import org.fenc.puntodeventa.repository.TipoPagoRepository;
 import org.springframework.stereotype.Service;
@@ -21,16 +22,20 @@ public class TipoPagoService {
         return tipoPagoRepository.findById(id);
     }
 
-    public TipoPago save(TipoPago tipoPago) {
+    public TipoPago save(TipoPagoRequestDto requestDto) {
+        TipoPago tipoPago = TipoPago.builder()
+                .descripcion(requestDto.getDescripcion())
+                .tipo(requestDto.getTipo())
+                .build();
         return tipoPagoRepository.save(tipoPago);
     }
 
-    public Optional<TipoPago> update(Long id, TipoPago tipoPago) {
-        if (tipoPagoRepository.existsById(id)) {
-            tipoPago.setIdTipoPago(id);
-            return Optional.of(tipoPagoRepository.save(tipoPago));
-        }
-        return Optional.empty();
+    public Optional<TipoPago> update(Long id, TipoPagoRequestDto requestDto) {
+        TipoPago tipoPago = tipoPagoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tipo de pago no encontrado"));
+        tipoPago.setDescripcion(requestDto.getDescripcion());
+        tipoPago.setTipo(requestDto.getTipo());
+        return Optional.of(tipoPagoRepository.save(tipoPago));
     }
 
     public boolean delete(Long id) {
