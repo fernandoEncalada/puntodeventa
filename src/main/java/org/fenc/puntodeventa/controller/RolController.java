@@ -35,7 +35,7 @@ public class RolController {
         description = "Lista de roles recuperada con éxito",
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = Rol.class))
     )
-    public List<Rol> getAll() {
+    public List<Rol> getAll(@RequestHeader("X-Content-Type-Options") String header) {
         return rolService.findAll();
     }
 
@@ -56,7 +56,8 @@ public class RolController {
             content = @Content
         )
     })
-    public ResponseEntity<Rol> getById(@Parameter(description = "ID del rol") @PathVariable Long id) {
+    public ResponseEntity<Rol> getById(@Parameter(description = "ID del rol") @PathVariable Long id,
+                                       @RequestHeader("X-Content-Type-Options") String header) {
         Optional<Rol> rol = rolService.findById(id);
         return rol.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -78,13 +79,14 @@ public class RolController {
             content = @Content
         )
     })
-    public Rol create(@Valid @RequestBody RolRequestDto request) {
+    public Rol create(@Valid @RequestBody RolRequestDto request, @RequestHeader("X-Content-Type-Options") String header) {
         return rolService.save(request);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar un rol", description = "Actualiza un rol existente por su ID")
-    public ResponseEntity<Rol> update(@PathVariable Long id, @Valid @RequestBody RolRequestDto request) {
+    public ResponseEntity<Rol> update(@PathVariable Long id, @Valid @RequestBody RolRequestDto request,
+                                      @RequestHeader("X-Content-Type-Options") String header) {
         return rolService.update(id, request)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -92,7 +94,8 @@ public class RolController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un rol", description = "Elimina un rol existente por su ID")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id,
+                                       @RequestHeader("X-Content-Type-Options") String header) {
         if (rolService.delete(id)) {
             return ResponseEntity.ok().build();
         } else {
@@ -102,7 +105,8 @@ public class RolController {
 
     @PostMapping("/{id}/competencias")
     @Operation(summary = "Añadir competencias a un rol", description = "Añade una lista de competencias a un rol existente por su ID")
-    public ResponseEntity<Rol> addCompetencia(@PathVariable Long id, @RequestBody List<Long> competenciasId) {
+    public ResponseEntity<Rol> addCompetencia(@PathVariable Long id, @RequestBody List<Long> competenciasId,
+                                              @RequestHeader("X-Content-Type-Options") String header) {
         return rolService.addCompetencia(id, competenciasId)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -110,7 +114,8 @@ public class RolController {
 
     @DeleteMapping("/{id}/competencias/{idCompetencia}")
     @Operation(summary = "Remover una competencia", description = "Remueve una competencia por su ID")
-    public ResponseEntity<Void> removeCompetencia(@PathVariable Long id, @PathVariable Long idCompetencia) {
+    public ResponseEntity<Void> removeCompetencia(@PathVariable Long id, @PathVariable Long idCompetencia,
+                                                  @RequestHeader("X-Content-Type-Options") String header) {
         if (rolService.removeCompetencia(id, idCompetencia)) {
             return ResponseEntity.ok().build();
         } else {

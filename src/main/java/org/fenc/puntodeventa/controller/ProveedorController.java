@@ -35,7 +35,7 @@ public class ProveedorController {
             description = "Lista de proveedores recuperada con éxito",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Proveedor.class))
     )
-    public List<Proveedor> getAll() {
+    public List<Proveedor> getAll(@RequestHeader("X-Content-Type-Options") String header) {
         return proveedorService.findAll();
     }
 
@@ -56,7 +56,8 @@ public class ProveedorController {
                     content = @Content
             )
     })
-    public ResponseEntity<Proveedor> getById(@Parameter(description = "ID del proveedor") @PathVariable Long id) {
+    public ResponseEntity<Proveedor> getById(@Parameter(description = "ID del proveedor") @PathVariable Long id,
+                                             @RequestHeader("X-Content-Type-Options") String header) {
         Optional<Proveedor> proveedor = proveedorService.findById(id);
         return proveedor.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -78,13 +79,15 @@ public class ProveedorController {
                     content = @Content
             )
     })
-    public Proveedor create(@Valid @RequestBody ProveedorRequestDto requestDto) {
+    public Proveedor create(@Valid @RequestBody ProveedorRequestDto requestDto,
+                            @RequestHeader("X-Content-Type-Options") String header) {
         return proveedorService.save(requestDto);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar un proveedor", description = "Actualiza un proveedor existente por su ID")
-    public ResponseEntity<Proveedor> update(@PathVariable Long id, @Valid @RequestBody ProveedorRequestDto requestDto) {
+    public ResponseEntity<Proveedor> update(@PathVariable Long id, @Valid @RequestBody ProveedorRequestDto requestDto,
+                                            @RequestHeader("X-Content-Type-Options") String header) {
         return proveedorService.update(id, requestDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -92,7 +95,8 @@ public class ProveedorController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un proveedor", description = "Elimina un proveedor existente por su ID")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id,
+                                       @RequestHeader("X-Content-Type-Options") String header) {
         if (proveedorService.delete(id)) {
             return ResponseEntity.ok().build();
         } else {

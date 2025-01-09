@@ -35,7 +35,7 @@ public class ProductoController {
         description = "Lista de productos recuperada con éxito",
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = Producto.class))
     )
-    public List<Producto> getAll() {
+    public List<Producto> getAll(@RequestHeader("X-Content-Type-Options") String header) {
         return productoService.findAll();
     }
 
@@ -56,7 +56,8 @@ public class ProductoController {
             content = @Content
         )
     })
-    public ResponseEntity<Producto> getById(@Parameter(description = "ID del producto") @PathVariable Long id) {
+    public ResponseEntity<Producto> getById(@Parameter(description = "ID del producto") @PathVariable Long id,
+                                            @RequestHeader("X-Content-Type-Options") String header) {
         Optional<Producto> producto = productoService.findById(id);
         return producto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

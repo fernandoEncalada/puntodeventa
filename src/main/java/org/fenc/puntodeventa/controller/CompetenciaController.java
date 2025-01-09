@@ -22,26 +22,29 @@ public class CompetenciaController {
 
     @GetMapping
     @Operation(summary = "Obtener todas las competencias", description = "Devuelve una lista de todas las competencias")
-    public List<Competencia> getAll() {
+    public List<Competencia> getAll(@RequestHeader("X-Content-Type-Options") String header) {
         return competenciaService.findAll();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener competencia por ID", description = "Devuelve una competencia por su ID")
-    public ResponseEntity<Competencia> getById(@PathVariable Long id) {
+    public ResponseEntity<Competencia> getById(@PathVariable Long id,
+                                               @RequestHeader("X-Content-Type-Options") String header) {
         Optional<Competencia> competencia = competenciaService.findById(id);
         return competencia.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @Operation(summary = "Crear una nueva competencia", description = "Crea una nueva competencia")
-    public Competencia create(@Valid @RequestBody CompetenciaRequestDto request) {
+    public Competencia create(@Valid @RequestBody CompetenciaRequestDto request,
+                              @RequestHeader("X-Content-Type-Options") String header) {
         return competenciaService.save(request);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar una competencia", description = "Actualiza una competencia existente por su ID")
-    public ResponseEntity<Competencia> update(@Valid @PathVariable Long id, @RequestBody CompetenciaRequestDto request) {
+    public ResponseEntity<Competencia> update(@Valid @PathVariable Long id, @RequestBody CompetenciaRequestDto request,
+                                              @RequestHeader("X-Content-Type-Options") String header) {
         return competenciaService.update(id, request)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -49,7 +52,8 @@ public class CompetenciaController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar una competencia", description = "Elimina una competencia existente por su ID")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id,
+                                       @RequestHeader("X-Content-Type-Options") String header) {
         if (competenciaService.delete(id)) {
             return ResponseEntity.ok().build();
         } else {

@@ -35,7 +35,7 @@ public class FacturaController {
         description = "Lista de facturas recuperada con éxito",
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = Factura.class))
     )
-    public List<Factura> getAll() {
+    public List<Factura> getAll(@RequestHeader("X-Content-Type-Options") String header) {
         return facturaService.findAll();
     }
 
@@ -56,7 +56,8 @@ public class FacturaController {
             content = @Content
         )
     })
-    public ResponseEntity<Factura> getById(@Parameter(description = "ID de la factura") @PathVariable Long id) {
+    public ResponseEntity<Factura> getById(@Parameter(description = "ID de la factura") @PathVariable Long id,
+                                           @RequestHeader("X-Content-Type-Options") String header) {
         Optional<Factura> factura = facturaService.findById(id);
         return factura.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -78,7 +79,8 @@ public class FacturaController {
             content = @Content
         )
     })
-    public ResponseEntity<Factura> create(@Valid @RequestBody FacturaRequestDto facturaRequestDto) {
+    public ResponseEntity<Factura> create(@Valid @RequestBody FacturaRequestDto facturaRequestDto,
+                                          @RequestHeader("X-Content-Type-Options") String header) {
         try {
             Factura factura = facturaService.createFactura(facturaRequestDto);
             return ResponseEntity.ok(factura);
@@ -89,7 +91,8 @@ public class FacturaController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar una factura", description = "Elimina una factura existente por su ID")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id,
+                                       @RequestHeader("X-Content-Type-Options") String header) {
         if (facturaService.delete(id)) {
             return ResponseEntity.ok().build();
         } else {

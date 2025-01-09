@@ -35,7 +35,7 @@ public class PersonaController {
             description = "Lista de personas recuperada con éxito",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Persona.class))
     )
-    public List<Persona> getAll() {
+    public List<Persona> getAll(@RequestHeader("X-Content-Type-Options") String header) {
         return personaService.findAll();
     }
 
@@ -56,7 +56,8 @@ public class PersonaController {
                     content = @Content
             )
     })
-    public ResponseEntity<Persona> getById(@Parameter(description = "ID de la persona") @PathVariable Long id) {
+    public ResponseEntity<Persona> getById(@Parameter(description = "ID de la persona") @PathVariable Long id,
+                                           @RequestHeader("X-Content-Type-Options") String header) {
         Optional<Persona> persona = personaService.findById(id);
         return persona.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -78,13 +79,15 @@ public class PersonaController {
                     content = @Content
             )
     })
-    public Persona create(@Valid @RequestBody PersonaRequestDto requestDto) {
+    public Persona create(@Valid @RequestBody PersonaRequestDto requestDto,
+                          @RequestHeader("X-Content-Type-Options") String header) {
         return personaService.save(requestDto);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar una persona", description = "Actualiza una persona existente por su ID")
-    public ResponseEntity<Persona> update(@PathVariable Long id, @Valid @RequestBody PersonaRequestDto requestDto) {
+    public ResponseEntity<Persona> update(@PathVariable Long id, @Valid @RequestBody PersonaRequestDto requestDto,
+                                          @RequestHeader("X-Content-Type-Options") String header) {
         return personaService.update(id, requestDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -92,7 +95,7 @@ public class PersonaController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar una persona", description = "Elimina una persona existente por su ID")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestHeader("X-Content-Type-Options") String header) {
         if (personaService.delete(id)) {
             return ResponseEntity.ok().build();
         } else {

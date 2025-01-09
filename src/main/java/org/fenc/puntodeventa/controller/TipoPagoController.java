@@ -35,7 +35,7 @@ public class TipoPagoController {
         description = "Lista de tipos de pago recuperada con éxito",
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = TipoPago.class))
     )
-    public List<TipoPago> getAll() {
+    public List<TipoPago> getAll(@RequestHeader("X-Content-Type-Options") String header) {
         return tipoPagoService.findAll();
     }
 
@@ -56,7 +56,8 @@ public class TipoPagoController {
             content = @Content
         )
     })
-    public ResponseEntity<TipoPago> getById(@Parameter(description = "ID del tipo de pago") @PathVariable Long id) {
+    public ResponseEntity<TipoPago> getById(@Parameter(description = "ID del tipo de pago") @PathVariable Long id,
+                                            @RequestHeader("X-Content-Type-Options") String header) {
         Optional<TipoPago> tipoPago = tipoPagoService.findById(id);
         return tipoPago.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -78,13 +79,14 @@ public class TipoPagoController {
             content = @Content
         )
     })
-    public TipoPago create(@Valid @RequestBody TipoPagoRequestDto requestDto) {
+    public TipoPago create(@Valid @RequestBody TipoPagoRequestDto requestDto, @RequestHeader("X-Content-Type-Options") String header) {
         return tipoPagoService.save(requestDto);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar un tipo de pago", description = "Actualiza un tipo de pago existente por su ID")
-    public ResponseEntity<TipoPago> update(@PathVariable Long id, @Valid @RequestBody TipoPagoRequestDto requestDto) {
+    public ResponseEntity<TipoPago> update(@PathVariable Long id, @Valid @RequestBody TipoPagoRequestDto requestDto,
+                                           @RequestHeader("X-Content-Type-Options") String header) {
         return tipoPagoService.update(id, requestDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -92,7 +94,7 @@ public class TipoPagoController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un tipo de pago", description = "Elimina un tipo de pago existente por su ID")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestHeader("X-Content-Type-Options") String header) {
         if (tipoPagoService.delete(id)) {
             return ResponseEntity.ok().build();
         } else {
