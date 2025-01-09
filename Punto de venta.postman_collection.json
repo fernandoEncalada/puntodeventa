@@ -1,0 +1,235 @@
+{
+	"info": {
+		"_postman_id": "0d303f5a-26a5-4c67-9bd4-147cc95d0c71",
+		"name": "Punto de venta",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11322241"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Content-Type-Options",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/producto",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"producto"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Usuarios",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Content-Type-Options",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/usuario",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Personas",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Content-Type-Options",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/persona",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"persona"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Proveedores",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Content-Type-Options",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/proveedor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"proveedor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Factura",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Content-Type-Options",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/factura",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"factura"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rol",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Content-Type-Options",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/rol",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"rol"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tipo pago",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Content-Type-Options",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/tipo-pago",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"tipo-pago"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clasificación",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Content-Type-Options",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/clasificacion",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"clasificacion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Competencia",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Content-Type-Options",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/competencia",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"competencia"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
